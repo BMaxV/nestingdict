@@ -17,7 +17,7 @@ class MySpecialDict(dict):
             c += 1
         return current
 
-    def myset(self, path_list, key_or_data):
+    def mysetter(self, path_list, key_or_data):
         path_list = path_list.copy()
         c = 0
         d = self
@@ -34,20 +34,33 @@ class MySpecialDict(dict):
 
         return self
 
-    def mypop(self, path_list, key_or_data, c=0, d=None):
-
+    def mypop(self, path_list, key_or_data, c=0, d=None, rm_rf=True):
+        """takes a list of keys specifying the 'path' and the value to be removed"""
         if d == None:
             d = self
-
+        #try:
+        #    assert path_list != []
+        #except AssertionError:
+            
+        #print(path_list)
         key = path_list[0]
         if key in d:
             if len(d[key]) != 0:
                 if type(d[key]) == type(self):
-
-                    r = self.mypop(path_list[1:], key_or_data, c+1, d[key])
+                    new_path=path_list[1:]
+                    if new_path!=[]:
+                        r = self.mypop(new_path, key_or_data, c+1, d[key])
+                    else:
+                        #this bit toggles whether it's allowed to pop
+                        #possibly not empty dicts from the path
+                        #deleting everything to the "right"
+                        #not sure if I want this yet
+                        #but the potential to shoot
+                        #yourself in the foot is definitely given.
+                        if rm_rf:
+                            r=True
                     if r:
                         d.pop(key)
-
                         if len(d) == 0:
                             return True
 
@@ -73,10 +86,17 @@ def test():
     assert d == d_save
 
     d2 = MySpecialDict()
-    d2.myset(path_l, data)
+    d2.mysetter(path_l, data)
 
     d2.mypop(path_l, data)
     assert MySpecialDict() == d2
+    
+    d3=MySpecialDict()
+    d3["1"]["2"]["3"]["4"]="5"
+    d3["a"]["b"]["c"]="d"
+    print(d3)
+    d3.mypop(["1","2"],"4")
+    print(d3)
 
 
 if __name__ == "__main__":
