@@ -12,7 +12,7 @@ d["1"]["2"]["3"]="4"
 
 
 
- - there is a special mypop method that will pop the value from the specified level, and removed empty dicts and paths:
+ - there is a special `mypop` method that will pop the value from the specified level, and removed empty dicts and paths:
 
 ```
 d["1"]["2"]="5"
@@ -20,7 +20,7 @@ d.mypop(["1","2","3"],"4")
 d == {'1': {'2': '5'}}
 ```
 
-- there is another method that will write to the dict with the same format as mypop:
+- there is another method that will write to the dict with the same format as `mypop`:
 
 
 ```
