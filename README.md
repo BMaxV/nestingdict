@@ -1,6 +1,9 @@
 # nestingdict
 An easily nesting dict.
 
+
+Eh. I realized that this method creates the keys but can't destroy them again, in a simple check. So this whole thing is pointless. :/
+
 I needed a container for message passing. I wanted it to easily nest and clean up, for easy debugging, probably not so much for performance. This is what I pieced together. It basically works like an easy to manage file system:
 
  - you can write to any nesting without creating the keys explicitly:
