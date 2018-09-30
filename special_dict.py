@@ -45,11 +45,8 @@ def mypop(d,path_list, key_or_data, c=0, rm_rf=True):
     #print(path_list)
     key = path_list[0]
     if key in d:
-        #print(d)
-        #print(d[key])
         if len(d[key]) != 0:
             if type(d[key]) == type(d):
-                #print(d)
                 new_path=path_list[1:]
                 if new_path!=[]:
                     r = mypop(d[key],new_path, key_or_data, c+1)
@@ -74,9 +71,38 @@ def mypop(d,path_list, key_or_data, c=0, rm_rf=True):
                     return True
 
 
+def mycheck(d,path_list,key_or_data,c=0):
+    r=None
+    print(d,path_list)
+    key = path_list[0]
+    if key in d:
+        if len(d[key]) != 0:
+            if type(d[key]) == type(d):
+                new_path=path_list[1:]
+                if new_path!=[]:
+                    #print("pre_check",d[key])
+                    r=mycheck(d[key],new_path, key_or_data, c+1)
+                    if r:
+                        return True
+                    else:
+                        return False
+                
+            if key in d:
+                #print("yep",key,d)
+                #rint()
+                if d[key] == key_or_data:
+                    
+                    return True
+                else:
+                    return False
+    return False
+                    
+
 def test():
     d={}
 
+
+    
     mysetter(d,["hello","there","my","friend"],"a")
     assert d =={"hello":{"there":{"my":{"friend":"a"}}}}
     d_save = d.copy()
@@ -85,34 +111,23 @@ def test():
     data = "a"
 
     mysetter(d,["hello","there","dude"], 2)
-    #d.mysetter(["hello","there","my","friend"
     # teardowns
     
     mypop(d,path_l, data)
-    #print(d)
     assert d=={"hello":{"there":{"dude":2}}}
-    
-    #return
-    #d2 = {}
-    #mysetter(d2,path_l, data)
-
-    #mypop(d2,path_l, data)
-    #assert {} == d2
     
     d3={}
     mysetter(d3,["1","2","3","4"],"5")
     mysetter(d3,["a","b","c"],"d")
-    #d3["1"]["2"]["3"]["4"]="5"
-    #d3["a"]["b"]["c"]="d"
-    #print(d3)
     mypop(d3,["1","2"],"4")
-    print("d3",d3)
+    
     assert d3 == {"a":{"b":{"c":"d"}}}
     
-    #d4={}
-    #mysetter(d4,["1","2","3"],"4")
+    r=mycheck(d3,["a","b","c"],"d")
+    assert r == True
     
-
-
+    r2=mycheck(d3,["hey","dude"],1)
+    assert r2 == False
+    
 if __name__ == "__main__":
     test()
